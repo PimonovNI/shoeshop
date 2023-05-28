@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8">
+    <title>Магазин</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/cart_style.css}">
+</head>
+<body>
+	<div class="conteiner">
+		<nav>
+			<ul>
+				<li><a th:href="@{/}">Головна</a></li>
+				<li><a th:href="@{/}">Каталог</a></li>
+				<li><a th:href="@{/}">Про нас</a></li>
+				<li style="float:right"><a th:href="@{/cart/{id}(id=${user.getId()})}" class="active">Кошик</a></li>
+			</ul>
+		</nav>
+		<div class="user">
+			<div class="name"><strong>Логін:</strong><span th:text="${user.getUsername()}"></span></div>
+			<div class="email"><strong>Пошта:</strong><span th:text="${user.getEmail()}"></span></div>
+			<form class="logout" th:method="POST" th:action="@{/auth/logout}">
+				<input type="submit" value="Вийти з аккаунту">
+			</form>
+		</div>
+		<div class="cart">
+			<div class="content">
+				<div class="errors" th:if="${errors != null}" th:each="e : ${errors}">
+					<div th:text="${e}"></div>
+				</div>
+				<div th:if="${errors == null}" class="product" th:each="s : ${shoes}">
+					<img th:src="@{/img/{name}(name=${s.getImage()})}">
+					<div class="info">
+						<div class="column1">
+							<div class="name" th:text="${s.getName()}"></div>
+							<div class="brand" th:text="${s.getBrandName()}"></div>
+						</div>
+						<div class="column2">
+							<div class="price" th:text="${s.getPrice()}"></div>
+							<form th:method="DELETE" th:action="@{/cart/{userId}/delete/{shoesId}(userId=${user.getId()}, shoesId=${s.getId()})}">
+								<input type="hidden" th:name="sizeId" th:value="${s.getSizeId()}">
+								<input type="submit" value="Прибрати">
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="buy" th:if="${errors == null}">
+					<div class="cost"><strong>Загальна ціна складає: </strong><span th:text="${sum}"></span></div>
+					<form th:method="PATCH" th:action="@{/cart/{id}/buy(id=${user.getId()})}">
+						<input type="submit" value="Перейти до сплати">
+					</form>
+				</div>
+			</div>
+		</div>
+		<footer>
+			<div>
+				<p>Демонстраційний проєкт</p>
+				<p>Цей сайт не є комерційним</p>
+			</div>
+			<div>
+				<p>Цей сайт не є комерційним</p>
+				<p>Контакти: <a href="#">nikitapimonov@gmail.com</a></p>
+			</div>
+		</footer>
+	</div>
+</body>
+</html>

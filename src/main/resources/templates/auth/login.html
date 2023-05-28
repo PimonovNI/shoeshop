@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8">
+    <title>Вхід</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/auth_style.css}">
+</head>
+<body>
+	<div class="conteiner">
+		<div class="content">
+			<div class="nameForm">
+				<hr/>
+				<div>Вхід</div>
+			</div>
+			<div class="error">
+				<div th:unless="${message}" th:class="${param.error} ? other : hide">
+					Неправильний логін чи пароль
+				</div>
+				<div th:if="${message}" th:class="${exception} ? exception : message" th:text="${info}">
+				</div>
+			</div>
+			<form class="info" name="f" th:method="POST" th:action="@{/process_login}">
+				<input type="text" name="username" placeholder="Логін">
+				<input type="password" name="password" placeholder="Пароль">
+				<input type="submit" value="Увійти">
+			</form>
+			<div class="toOtherAuth">
+				<div><p>Вперше на сайті?</p></div>
+				<div><a th:href="@{/auth/registration}">Реєстрація</a></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8">
+	<title>Магазин</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/edit_style.css}">
+</head>
+<body>
+<div class="conteiner">
+	<form enctype="multipart/form-data" th:action="@{/admin/{action}(action=${action})}" th:method="${action.equals('edit')} ? PATCH : POST" th:object="${shoes}">
+		<input type="hidden" th:if="${action.equals('edit')}" th:value="${shoes.getId()}" th:field="*{id}">
+		<div class="title">
+			<label for="inp_name">Назва:</label>
+			<input type="text" id="inp_name" th:field="*{name}" placeholder="Назва">
+		</div>
+		<div class="error" th:if="${#fields.hasErrors('name')}">
+			<div th:errors="*{name}"></div>
+		</div>
+		<div class="image">
+			<label for="inp_image">Зображення:</label>
+			<input type="file" accept="image/png, image/jpeg" th:field="*{image}" id="inp_image">
+			<br>
+			<div th:if="${action.equals('edit')}">
+				<input type="checkbox" id="inp_image_chage" value="1" th:field="*{isNewImage}" >
+				<input type="hidden" th:if="${action.equals('edit')}" th:value="0" th:field="*{isNewImage}">
+				<label for="inp_image_chage">Замінити зображення</label>
+			</div>
+		</div>
+		<div class="error" th:if="${#fields.hasErrors('image')}">
+			<div th:errors="*{image}"></div>
+		</div>
+		<div class="desc">
+			<label for="inp_desc">Опис:</label>
+			<input type="text" id="inp_desc" th:field="*{description}" placeholder="Коротка інформація про товар">
+		</div>
+		<div class="error" th:if="${#fields.hasErrors('description')}">
+			<div th:errors="*{description}"></div>
+		</div>
+		<div class="sex">
+			<div>
+				<input type="radio" name="gender" id="gender1" th:field="*{gender}" value="MAN">
+				<label for="gender1">Чоловіче</label>
+			</div>
+			<div>
+				<input type="radio" name="gender" id="gender2" th:field="*{gender}" value="WOMAN">
+				<label for="gender2">Жіноче</label>
+			</div>
+			<div>
+				<input type="radio" name="gender" id="gender3" th:field="*{gender}" value="CHILD">
+				<label for="gender3">Дитяче</label>
+			</div>
+		</div>
+		<div class="error" th:if="${#fields.hasErrors('gender')}">
+			<div th:errors="*{gender}"></div>
+		</div>
+		<div class="brand">
+			<select name="brands" th:field="*{brand}">
+				<option value="-1">Новий</option>
+				<option th:each="brand : ${brands}" th:value="${brand.getId()}" th:text="${brand.getName()}"></option>
+			</select>
+			<input type="text" th:field="*{newBrand}" placeholder="Новий бренд">
+		</div>
+		<div class="error" th:if="${#fields.hasErrors('brand')}">
+			<div th:errors="*{brand}"></div>
+		</div>
+		<div class="price">
+			<label for="inp_price">Ціна:</label>
+			<input type="number" th:field="*{price}" id="inp_price" placeholder="0">
+		</div>
+		<div class="error" th:if="${#fields.hasErrors('price')}">
+			<div th:errors="*{price}"></div>
+		</div>
+		<div class="infoAboutAvailabilities">
+			<div class="availability" th:each="a, stat : ${shoes.getAvailabilities()}">
+				<select name="size" th:field="*{availabilities[__${stat.index}__].sizeId}">
+					<option value="-1">Розмір</option>
+					<option th:each="size : ${sizes}" th:value="${size.getId()}" th:text="${size.getSize()}"></option>
+				</select>
+				<input type="number" th:field="*{availabilities[__${stat.index}__].count}" placeholder="Кількість на складі">
+			</div>
+		</div>
+		<div class="error" th:if="${#fields.hasErrors('availabilities')}">
+			<div th:errors="*{availabilities}"></div>
+		</div>
+		<div class="button">
+			<input type="submit" value="Зберегти">
+		</div>
+	</form>
+</div>
+</body>
+</html>

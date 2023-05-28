@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8">
+    <title>Магазин</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main_style.css}">
+</head>
+<body>
+	<div class="conteiner">
+		<nav>
+			<ul>
+				<li><a th:href="@{/}" class="active">Головна</a></li>
+				<li><a th:href="@{/}">Каталог</a></li>
+				<li><a th:href="@{/}">Про нас</a></li>
+				<li style="float:right"><a th:href="@{/cart}">Кошик</a></li>
+			</ul>
+		</nav>
+		<div class="content">
+			<div class="filter">
+				<form th:method="GET" th:action="@{/filter}">
+					<input type="hidden" th:name="page" th:value="${page}">
+					<div>
+						<div class="subtitle">Сортувати за:</div>
+						<div>
+							<input type="radio" th:name="sort" th:value="BY_PRICE_DES" id="sort1" th:checked="${(param.sort != null) and (param.sort[0] == 'BY_PRICE_DES')}">
+							<label for="sort1">За спаданням ціни</label>
+						</div>
+						<div>
+							<input type="radio" th:name="sort" th:value="BY_PRICE_ASC" id="sort2" th:checked="${(param.sort != null) and (param.sort[0] == 'BY_PRICE_ASC')}">
+							<label for="sort2">За зростанням ціни</label>
+						</div>
+					</div>
+
+					<div>
+						<div class="subtitle">Приналежність:</div>
+						<div>
+							<input type="checkbox" th:name="gender" th:value="MAN" id="gender1" th:checked="${(param.gender != null) and (#arrays.contains(param.gender, 'MAN'))}">
+							<label for="gender1">Чоловіче</label>
+						</div>
+						<div>
+							<input type="checkbox" th:name="gender" th:value="WOMAN" id="gender2" th:checked="${(param.gender != null) and (#arrays.contains(param.gender, 'WOMAN'))}">
+							<label for="gender2">Жіноче</label>
+						</div>
+						<div>
+							<input type="checkbox" th:name="gender" th:value="CHILD" id="gender3" th:checked="${(param.gender != null) and (#arrays.contains(param.gender, 'CHILD'))}">
+							<label for="gender3">Дитяче</label>
+						</div>
+					</div>
+
+					<div>
+						<div class="subtitle">Ціна:</div>
+						<div class="forInputs">
+							<input th:value="${param.min_price != null} ? ${param.min_price} : ''" type="number" th:name="min_price" placeholder="Від 0">
+							<input th:value="${param.max_price != null} ? ${param.max_price} : ''" type="number" th:name="max_price" placeholder="До 20000">
+						</div>
+					</div>
+
+					<div>
+						<div class="subtitle">Розміри:</div>
+						<div class="forInputs">
+							<input th:value="${param.min_size != null} ? ${param.min_size} : ''" type="number" th:name="min_size" placeholder="Від 20">
+							<input th:value="${param.max_size != null} ? ${param.max_size} : ''" type="number" th:name="max_size" placeholder="До 46">
+						</div>
+					</div>
+
+					<div>
+						<div class="subtitle">Бренди:</div>
+						<div th:each="b : ${brands}">
+							<input type="checkbox" th:name="brand" th:value="${b.getName()}" th:id="${b.getId()}" th:checked="${(param.brand != null) and (#arrays.contains(param.brand, b.getName()))}">
+							<label th:for="${b.getId()}" th:text="${b.getName()}"></label>
+						</div>
+					</div>
+
+					<div>
+						<div class="subtitle">На складі:</div>
+						<div>
+							<input type="radio" th:name="isContain" th:value="on" id="isContain1" th:checked="${(param.isContain != null) and (param.isContain[0] == 'on')}">
+							<label for="isContain1">Є в наявності</label>
+						</div>
+						<div>
+							<input type="radio" th:name="isContain" th:value="off" id="isContain2" th:checked="${(param.isContain == null) or (param.isContain[0] != 'on')}">
+							<label for="isContain2">Будь-які</label>
+						</div>
+					</div>
+
+					<input type="submit" value="Знайти">
+				</form>
+			</div>
+
+			<div class="goods">
+				<div class="item" th:each="s : ${shoes}">
+					<img th:src="@{/img/{name}(name=${s.getImage()})}">
+					<div class="goodsName" th:text="${s.getName()}"></div>
+					<div class="addInfo">
+						<div class="price" th:text="${s.getBrandName()}"></div>
+						<div class="brand" th:text="${s.getPrice()}"></div>
+					</div>
+					<form th:method="GET" th:action="@{/shoes_details/{id}(id=${s.getId()})}">
+						<input type="submit" value="Переглянути" th:if="${s.isPresent()}">
+						<div class="error" th:unless="${s.isPresent()}">
+							<div>
+								Немає в наявності
+							</div>
+						</div>
+					</form>
+					<span class="block" th:unless="${s.isPresent()}"></span>
+				</div>
+			</div>
+		</div>
+		<div class="pages">
+			<div class="page">
+				<div class="chagePage">
+					<div>Сторінки:</div>
+					<form th:method="GET" th:action="${filter} ? @{/filter} : @{/}">
+						<span th:if="${filter}">
+							<span th:if="${param.gender != null}" th:each="g : ${param.gender}">
+								<input type="hidden" th:name="gender" th:value="${g}">
+							</span>
+							<span th:if="${param.brand != null}" th:each="b : ${param.brand}">
+								<input type="hidden" th:name="brand" th:value="${b}">
+							</span>
+							<input type="hidden" th:if="${param.sort != null}" th:name="sort" th:value="${param.sort}">
+							<input type="hidden" th:if="${param.min_price != null}" th:name="min_price" th:value="${param.min_price}">
+							<input type="hidden" th:if="${param.max_price != null}" th:name="max_price" th:value="${param.max_price}">
+							<input type="hidden" th:if="${param.min_size != null}" th:name="min_size" th:value="${param.min_size}">
+							<input type="hidden" th:if="${param.max_size != null}" th:name="max_size" th:value="${param.max_size}">
+							<input type="hidden" th:if="${param.isContain != null}" th:name="isContain" th:value="${param.isContain}">
+						</span>
+						<input type="hidden" th:name="page" th:value="${page - 1}">
+						<input type="submit" value="Назад" th:class="${page <= 1} ? hide : simpleClass">
+					</form>
+					<form th:method="GET" th:action="${filter} ? @{/filter} : @{/}">
+						<span th:if="${filter}">
+							<span th:if="${param.gender != null}" th:each="g : ${param.gender}">
+								<input type="hidden" th:name="gender" th:value="${g}">
+							</span>
+							<span th:if="${param.brand != null}" th:each="b : ${param.brand}">
+								<input type="hidden" th:name="brand" th:value="${b}">
+							</span>
+							<input type="hidden" th:if="${param.sort != null}" th:name="sort" th:value="${param.sort}">
+							<input type="hidden" th:if="${param.min_price != null}" th:name="min_price" th:value="${param.min_price}">
+							<input type="hidden" th:if="${param.max_price != null}" th:name="max_price" th:value="${param.max_price}">
+							<input type="hidden" th:if="${param.min_size != null}" th:name="min_size" th:value="${param.min_size}">
+							<input type="hidden" th:if="${param.max_size != null}" th:name="max_size" th:value="${param.max_size}">
+							<input type="hidden" th:if="${param.isContain != null}" th:name="isContain" th:value="${param.isContain}">
+						</span>
+						<input type="hidden" th:name="page" th:value="${page + 1}">
+						<input type="submit" value="Вперед" th:class="${shoes.size() < 12} ? hide : simpleClass">
+					</form>
+				</div>
+			</div>
+		</div>
+		<footer>
+			<div>
+				<p>Демонстраційний проєкт</p>
+				<p>Цей сайт не є комерційним</p>
+			</div>
+			<div>
+				<p>Цей сайт не є комерційним</p>
+				<p>Контакти: <a href="#">nikitapimonov@gmail.com</a></p>
+			</div>
+		</footer>
+	</div>
+</body>
+</html>

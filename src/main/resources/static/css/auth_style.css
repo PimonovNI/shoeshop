@@ -1,0 +1,129 @@
+html, body {
+	margin: 0;
+	height: 100%;
+	font-family:sans-serif;
+}
+
+a {
+	transition: .2s;
+	text-decoration: none;
+	color:#388cd1;
+}
+
+a:hover {
+	color:#4181b5;
+}
+
+.hide {
+	opacity: 0;
+}
+
+.conteiner {
+	background-color: #ebebed;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+}
+
+.content {
+	margin: 0;
+	height: 400px;
+	width: 500px;
+}
+
+.nameForm {
+    position: relative;
+    padding-top: 30px;
+    margin-bottom: 20px;
+}
+
+.nameForm hr {
+	width: 60%;
+	border-width: 2px;
+	border-radius: 1px;
+}
+
+.nameForm div {
+    position: absolute;
+	font-size: 900;
+    left: 50%;
+    transform:  translate(-50%, 0);
+    top: 25px;
+    background: #ebebed;
+    padding: 0 10px;
+    font-weight: 700;
+    font-size: 25px;
+}
+
+.error div {
+	width: 50%;
+	padding: 10px;
+	border-radius: 5px;
+	background-color: #ffbcab;
+	color: #732815;
+	font-size: 14px;
+}
+
+.error {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.error .message {
+	background-color: #d7ffb4;
+	color: #333;
+}
+
+.error .exception {
+	background-color: #ffbcab;
+    color: #732815;
+}
+
+.info {
+	display: flex;
+	flex-direction: column;
+    align-items: center;
+	justify-content: center;
+}
+
+.info input[type=text], input[type=password] {
+    font-size: inherit;
+    margin: 10px 10px;
+	padding:10px;
+	border: 0;
+	border-radius:5px;
+	width: 50%;
+    box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
+}
+
+.info input[type=submit] {
+	padding:10px;
+    border:0;
+    background-color:#388cd1;
+    transition: .2s;
+    color:#fff;
+    font-weight:600;
+    font-size: 14px;
+    border-radius:5px;
+    margin: 30px 10px 0 10px;
+    width:60%;
+}
+
+.info input[type=submit]:hover {
+    background-color:#4181b5;
+}
+
+.toOtherAuth {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: row;
+}
+
+.toOtherAuth div {
+	margin: 0 5px 0 5px;
+}
+

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8">
+    <title>Магазин</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin_style.css}">
+</head>
+<body>
+	<div class="conteiner">
+		<div class="cart">
+			<div class="create">
+				<form th:method="GET" th:action="@{/admin/new}">
+					<input type="submit" value="Створити нове оголошення">
+				</form>
+			</div>
+			<div class="content">
+				<div class="product" th:each="s : ${shoes}">
+					<img th:src="@{/img/{path}(path=${s.getImage()})}">
+					<div class="info">
+						<div class="column1">
+							<div class="name" th:text="${s.getName()}"></div>
+							<div class="brand" th:text="${s.getBrandName()}"></div>
+						</div>
+						<div class="column2">
+							<div class="price" th:text="${s.getPrice()}"></div>
+							<div class="buttons">
+								<form th:method="GET" th:action="@{/admin/{id}/edit(id=${s.getId()})}">
+									<input type="submit" value="Редагувати">
+								</form>
+								<form th:method="DELETE" th:action="@{/admin/{id}(id=${s.getId()})}">
+									<input type="submit" value="Видалити">
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
