@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,31 +53,38 @@ public class CartsService {
 
     @Transactional
     public void buy(Long userId, List<String> errors) {
+        List<Long> idsForDelete = new ArrayList<>();
         cartsRepository
                 .findByUserIdWithShoesAndAvailability(userId)
                 .forEach(c ->
                 {
+                    boolean foundCurrent = false;
                     try {
                         for (Availability a : c.getShoes().getAvailabilities()) {
                             if (a.getSize().getId().equals(c.getSize().getId())) {
                                 if (a.getCount() > 0) {
                                     a.setCount(a.getCount() - 1);
                                     if (a.getCount() == 0)
-                                        availabilitiesRepository.deleteByIdQuickly(a.getId());
+                                        availabilitiesRepository.deleteByIdCustom(a.getId());
                                     else
-                                        availabilitiesRepository.updateCountQuickly(a.getId(), a.getCount());
+                                        availabilitiesRepository.updateCountCustom(a.getId(), a.getCount());
+                                    foundCurrent = true;
                                     break;
                                 } else {
                                     throw new NotContainShoesException("Взуття - " + a.getShoes().getName() + ", немає в наявності, оберіть інше взуття, розмір, чи почекайте, поки з'явиться в наявності.");
                                 }
                             }
                         }
+                        if (!foundCurrent)
+                            throw new NotContainShoesException("Взуття - " + c.getShoes().getName() + ", немає в наявності, оберіть інше взуття, розмір, чи почекайте, поки з'явиться в наявності.");
                     }
                     catch (NotContainShoesException e) {
                         errors.add(e.getMessage());
                     }
-                    cartsRepository.deleteByIdQuickly(c.getId());
+                    idsForDelete.add(c.getId());
                 });
+
+        cartsRepository.deleteAllByIdCustom(idsForDelete);
     }
 
     @Transactional

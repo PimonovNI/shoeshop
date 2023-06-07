@@ -17,7 +17,7 @@ import java.util.List;
 public interface CartsRepository extends JpaRepository<Cart, Long>, CustomCartRepository {
     Optional<Cart> findByUserAndShoesAndSize(Person person, Shoes shoes, Size size);
     @Modifying
-    @Query(value = "DELETE FROM Cart c WHERE c.id = :id")
-    void deleteByIdQuickly(@Param("id") Long id);
+    @Query(value = "DELETE FROM Cart c WHERE c.id IN :ids")
+    void deleteAllByIdCustom(@Param("ids") List<Long> id);
     List<Cart> findAllByUser(Person person);
 }

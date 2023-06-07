@@ -16,9 +16,9 @@ public interface AvailabilitiesRepository extends JpaRepository<Availability, Lo
 
     @Modifying
     @Query(value = "UPDATE Availability a SET a.count = :count WHERE a.id = :id")
-    void updateCountQuickly(@Param("id") Long id, @Param("count") Integer count);
+    void updateCountCustom(@Param("id") Long id, @Param("count") Integer count);
 
     @Modifying
     @Query(value = "DELETE FROM Availability a WHERE a.id = :id")
-    void deleteByIdQuickly(@Param("id") Long id);
+    void deleteByIdCustom(@Param("id") Long id);
 }
