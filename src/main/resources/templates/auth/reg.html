@@ -6,6 +6,8 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/auth_style.css}">
 </head>
 <body>
+	<script defer th:src="@{/js/reg.js}"></script>
+
 	<div class="conteiner">
 		<div class="content">
 			<div class="nameForm">
@@ -13,15 +15,15 @@
 				<div>Реєстрація</div>
 			</div>
 			<form class="info" th:action="@{/auth/registration}" th:method="POST" th:object="${person}">
-				<input type="text" th:field="*{username}" placeholder="Логін">
+				<input name="username" type="text" th:field="*{username}" placeholder="Логін">
 				<div th:if="${#fields.hasErrors('username')}" class="error">
 					<div th:errors="*{username}"></div>
 				</div>
-				<input type="text" th:field="*{email}" placeholder="Пошта">
+				<input name="email" type="text" th:field="*{email}" placeholder="Пошта">
 				<div th:if="${#fields.hasErrors('email')}" class="error">
 					<div th:errors="*{email}"></div>
 				</div>
-				<input type="password" th:field="*{password}" placeholder="Пароль">
+				<input name="password" type="password" th:field="*{password}" placeholder="Пароль">
 				<div th:if="${#fields.hasErrors('password')}" class="error">
 					<div th:errors="*{password}"></div>
 				</div>

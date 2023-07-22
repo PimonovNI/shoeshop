@@ -190,6 +190,11 @@ nav li a:hover {
 	background-color: #388cd1;
 }
 
+.size-selected label {
+	color: white;
+	background-color: #388cd1;
+}
+
 .end {
 	display: flex;
 	flex-direction: row;
